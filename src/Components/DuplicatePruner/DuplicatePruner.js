@@ -3,10 +3,11 @@ import { Grid, Stepper, Step, StepLabel, Button, Checkbox, FormControlLabel, Typ
 import { Description } from '../Description';
 import { Progress } from '../Progress';
 import { DuplicateDisplay } from './DuplicateDisplay';
+import { ServerLiason } from '../../utils/ServerLiason';
 
 const descriptionText = "If you have a large enough library, you might find that you have quite a few duplicate songs saved. This is because Spotify considers tracks released as singles different from tracks released in an album, even if they are the exact same song. And depending on your listening habits, you also may have accumulated explicit and censored versions of songs. Regardless of why they are there, these duplicates can be pruned out of your Spotify library with this tool.";
 
-const stepNames = ['Sign Into Spotify', 'Fetch Songs', 'Review'];
+const stepNames = ['Sign Into Spotify', 'Fetch Songs', 'Confirm', 'Review'];
 
 const explicitPref = Object.freeze({
     EXPLICIT: 1,
@@ -58,7 +59,7 @@ const pruneDuplicates = (liason, duplicates, toKeep) => {
     const toRemove = duplicates.reduce((toRemove, dups, i) =>
         toRemove.concat(dups.filter((track, j) => j !== toKeep[i])) // for each set of duplicates, adds all songs that are not being kept
         , [])
-    console.log(toRemove);
+    liason.removeTracks(toRemove);
 }
 
 const DuplicatePruner = ({ authorized, tracks, liason, loginButton, progress, finished }) => {
@@ -106,6 +107,12 @@ const DuplicatePruner = ({ authorized, tracks, liason, loginButton, progress, fi
                         duplicates={duplicates}
                         proceed={selected => pruneDuplicates(liason, duplicates, selected)}
                     />
+                )
+            case 3:
+                return (
+                    <Typography>
+                        Duplicate songs successfully removed.
+                    </Typography>
                 )
         }
     }
