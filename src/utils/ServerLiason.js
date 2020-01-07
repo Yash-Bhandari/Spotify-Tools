@@ -23,7 +23,7 @@ export function ServerLiason(authKey) {
             .then(json => json.items)
 
 
-        while (items.length > 0) {
+        while (items.length > 0 && tracks.length < 500) {
             tracks = tracks.concat(items.map(
                 item => item.track
             ));

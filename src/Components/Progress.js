@@ -5,6 +5,6 @@ export const Progress = ({ numTracks }) => {
     return (
         <Typography variant='subtitle1'>
             {numTracks} tracks fetched.<br></br>
-    </Typography>
+        </Typography>
     )
 }
