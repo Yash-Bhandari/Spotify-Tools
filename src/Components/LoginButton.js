@@ -15,7 +15,7 @@ export const LoginButton = ({ authorized, setAccessToken }) => {
             disabled={authorized}
             href={authLink + '&redirect_uri=' + window.location.href}>
             {!authorized
-                ? 'Sign In To Spotify'
+                ? 'Sign Into Spotify'
                 : 'Authorized'}
         </Button>
     )

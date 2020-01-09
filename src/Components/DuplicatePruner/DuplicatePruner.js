@@ -56,16 +56,20 @@ const pruneDuplicates = (liason, duplicates, toKeep) => {
     duplicates.filter((dups, i) => toKeep[i] !== -1);
     toKeep.filter(val => val !== -1);
 
-    const toRemove = duplicates.reduce((toRemove, dups, i) =>
-        toRemove.concat(dups.filter((track, j) => j !== toKeep[i])) // for each set of duplicates, adds all songs that are not being kept
-        , [])
+    const toRemove = duplicates.reduce((toRemove, dups, i) => {
+        toRemove.push(...dups.filter((track, j) => j !== toKeep[i])) // for each set of duplicates, adds all songs that are not being kept
+        return toRemove;
+    }, [])
+    console.log(toRemove);
     liason.removeTracks(toRemove);
+    return toRemove.length;
 }
 
 const DuplicatePruner = ({ authorized, tracks, liason, loginButton, progress, finished }) => {
     const [duplicates, setDuplicates] = useState([]);
     const [pruned, setPruned] = useState(false);
     const [step, setStep] = useState(0);
+    const [numRemoved, setNumRemoved] = useState(0);
     const [settings, setSettings] = useState({
         explicit: explicitPref.IGNORE,
     })
@@ -82,18 +86,30 @@ const DuplicatePruner = ({ authorized, tracks, liason, loginButton, progress, fi
     const getContent = () => {
         switch (step) {
             case 0:
-                return loginButton
+                return (
+                    <>
+                        <Grid item xs={12} container justify='center'>
+                            <Typography>
+                                We'll need permission to read and modify your Spotify library.
+                            </Typography>
+                        </Grid>
+                        <Grid item>
+                            {loginButton}
+                        </Grid>
+                    </>
+                )
             case 1:
                 return (
                     <>
-                        <Grid item xs={12} align='center'>
+                        <Grid item xs={12} container justify='center'>
                             {progress}
                         </Grid>
-                        <Grid item xs={12} align='center'>
+                        <Grid item xs={12} container justify='center'>
                             <Button
                                 variant='contained'
                                 onClick={() => { setStep(2) }}
                                 disabled={!finished}
+                                color='primary'
                             >
                                 Next
                         </Button>
@@ -105,13 +121,16 @@ const DuplicatePruner = ({ authorized, tracks, liason, loginButton, progress, fi
                 return (
                     <DuplicateDisplay
                         duplicates={duplicates}
-                        proceed={selected => pruneDuplicates(liason, duplicates, selected)}
+                        proceed={selected => {
+                            setNumRemoved(pruneDuplicates(liason, duplicates, selected));
+                            setStep(3);
+                        }}
                     />
                 )
             case 3:
                 return (
                     <Typography>
-                        Duplicate songs successfully removed.
+                        All done! {numRemoved} duplicate song(s) successfully removed.
                     </Typography>
                 )
         }
@@ -127,7 +146,7 @@ const DuplicatePruner = ({ authorized, tracks, liason, loginButton, progress, fi
                     </Step>
                 )}
             </Stepper>
-            <Grid container justify='center'>
+            <Grid container justify='center' spacing={2}>
                 {getContent()}
             </Grid>
         </>

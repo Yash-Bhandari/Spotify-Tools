@@ -23,15 +23,18 @@ export function ServerLiason(authKey) {
             .then(json => json.items)
 
 
-        while (items.length > 0 && tracks.length < 1500) {
+        while (items.length > 0) {
             tracks = tracks.concat(items.map(
                 item => item.track
             ));
             setTracks(tracks);
-            console.log(tracks);
-            items = await fetch(url+'&offset='+tracks.length, req)
+            let length = tracks.length;
+            console.log('sending request with length of', length);
+            items = await (fetch(url+'&offset='+length, req)
                 .then(resp => resp.json())
-                .then(json => json.items)
+                .then(json => json.items))
+            console.log('recieved request with length of', length);
+            
         }
         console.log(tracks)
         return true;
