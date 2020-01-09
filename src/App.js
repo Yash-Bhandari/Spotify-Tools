@@ -13,13 +13,13 @@ const App = props => {
   const [accessToken, updateAccessToken] = useState('');
   const [liason, setLiason] = useState(null);
   const [tracks, setTracks] = useState([]);
-  const [finished, setFinished] = useState(false)
+  const [finishedFetching, setFinishedFetching] = useState(false)
 
   const setAccessToken = async newAccessToken => {
     updateAccessToken(newAccessToken);
     const sl = new ServerLiason(newAccessToken);
     setLiason(sl);
-    sl.fetchTracks(setTracks).then(done => {setFinished(done)}); // fetch tracks is async that returns true on completion
+    sl.fetchTracks(setTracks).then(done => {setFinishedFetching(done)}); // fetch tracks is async that returns true on completion
   }
   let authorized = Boolean(accessToken);
   useEffect(() => handleRedirect(authorized, setAccessToken), []);
@@ -32,7 +32,7 @@ const App = props => {
     progress,
     authorized,
     tracks,
-    finished
+    finishedFetching
   }
   return (
     <Router>
