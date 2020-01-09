@@ -1,4 +1,4 @@
-export function ServerLiason(authKey) {
+function ServerLiason(authKey) {
     this.authKey = authKey;
     this.url = 'https://api.spotify.com/v1/me';
     this.headers = {
@@ -6,11 +6,8 @@ export function ServerLiason(authKey) {
         'Authorization': 'Bearer ' + authKey
     }
 
-    this.sayName = () => {
-        return this.url;
-    }
-
     this.fetchTracks = async (setTracks) => {
+        console.log('called');
         const url = this.url + '/tracks?limit=50'
         const req = {
             method: 'GET',
@@ -18,23 +15,24 @@ export function ServerLiason(authKey) {
         }
 
         let tracks = [];
-        let items = await fetch(url, req)
-            .then(resp => resp.json())
-            .then(json => json.items)
 
+        let numTracks = 0;
+        while (true && tracks.length < 600) {
+            const items = await (fetch(url + '&offset=' + numTracks, req)
+                .then(resp => resp.json())
+                .then(json => json.items));
 
-        while (items.length > 0) {
+            // Each api call requests 50 songs
+            // If fewer are returned, then we have exhausted the user's library
+            if (items.length !== 50)
+                break;
+
             tracks = tracks.concat(items.map(
                 item => item.track
             ));
+
+            numTracks += items.length;
             setTracks(tracks);
-            let length = tracks.length;
-            console.log('sending request with length of', length);
-            items = await (fetch(url+'&offset='+length, req)
-                .then(resp => resp.json())
-                .then(json => json.items))
-            console.log('recieved request with length of', length);
-            
         }
         console.log(tracks)
         return true;
@@ -49,14 +47,16 @@ export function ServerLiason(authKey) {
         const ids = tracks.map(track => track.id);
 
         // maximum of 50 songs can be removed at a time
-        for (let i = 0; i < ids.length; i+=50) {
+        for (let i = 0; i < ids.length; i += 50) {
             await fetch(url, {
                 method: 'DELETE',
                 headers: this.headers,
-                body: JSON.stringify(ids.slice(i, i+50))
+                body: JSON.stringify(ids.slice(i, i + 50))
             })
         }
 
         return true;
     }
 }
+
+export default ServerLiason;
