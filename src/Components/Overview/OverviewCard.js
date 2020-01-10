@@ -4,21 +4,10 @@ import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        'height': '100%',
+        'height': '80%',
         'padding': theme.spacing(2),
         'text-align': 'center',
-        'display': 'flex',
-        'flex-direction': 'column',
-        'alignItems': 'center',
-        'justify-content': 'space-around',
-        'overflow': 'hidden'
     },
-    title: {
-        //'margin-bottom': 'auto'
-    },
-    button: {
-        //'margin-top': 'auto'
-    }
 }));
 
 const OverviewCard = ({ title, description, path }) => {

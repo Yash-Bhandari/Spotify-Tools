@@ -4,7 +4,8 @@ import OverviewCard from './OverviewCard';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        'marginTop': theme.spacing(3)
+        'marginTop': theme.spacing(3),
+        'overflow': 'hidden'
     },
     card: {
         'min-width': '40%',
