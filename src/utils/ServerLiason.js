@@ -6,6 +6,11 @@ function ServerLiason(authKey) {
         'Authorization': 'Bearer ' + authKey
     }
 
+    /**
+     * Fetches user's entire library from the Spotify API
+     * @param setTracks A function called to immutably update a list of tracks.
+     * @returns true once all tracks have been fetched.
+     */
     this.fetchTracks = async (setTracks) => {
         console.log('called');
         const url = this.url + '/tracks?limit=50'
