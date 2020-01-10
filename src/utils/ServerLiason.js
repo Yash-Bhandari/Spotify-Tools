@@ -1,3 +1,5 @@
+import SelectInput from "@material-ui/core/Select/SelectInput";
+
 /**
  * Given a list of tracks, return a comma-seperated string of their track ids.
  * @param tracks A list of tracks
@@ -12,6 +14,15 @@ function ServerLiason(authKey) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + authKey
     }
+
+    fetch(this.url + '/me', {
+        headers: this.headers
+    })
+        .then(resp => resp.json())
+        .then(user => {
+            this.user = user;
+            console.log(user);
+        })
 
     /**
      * Fetches user's entire library from the Spotify API
@@ -137,7 +148,7 @@ function ServerLiason(authKey) {
 
     /**
      * Returns a list of recommended tracks based off of a list of seed tracks
-     * @param seeds A list of tracks
+     * @param seeds A list of up to 5 tracks
      * @param limit The number of song recommendations
      * @returns A list of recommended tracks
      */
@@ -145,12 +156,61 @@ function ServerLiason(authKey) {
         const ids = commaSepIDs(seeds);
         const url = this.url + '/recommendations/?limit=' + limit + '&seed_tracks=' + ids;
 
-        return fetch(url, {
+        return await fetch(url, {
             method: 'GET',
             headers: this.headers
         })
+            .then(resp => resp.json())
+            .then(json => json.tracks);
+    }
+
+    /**
+     * Creates a playlist with the given properties and adds the given tracks to it.
+     * @param name The name of the playlist
+     * @param isPublic Whether or not the playlist should be pubic
+     * @param description The playlist's description
+     * @returns The playlist object returned by spotify
+     */
+    this.createPlaylist = async (name, isPublic, description, tracks) => {
+        //Wait until user data has been fetched
+        while (!this.user)
+            await new Promise(r => setTimeout(r, 2000));
+
+        const url = this.url + '/users/' + this.user.id + '/playlists';
+
+        const playlist = await fetch(url, {
+            method: 'POST',
+            headers: this.headers,
+            body: JSON.stringify({
+                name,
+                description,
+                public: isPublic
+            })
+        })
         .then(resp => resp.json())
-        .then(json => json.tracks);
+
+        console.log(playlist);
+
+        await this.addTracksToPlaylist(playlist.id, tracks);
+        return playlist;
+    }
+
+    /**
+     * Adds tracks to the specified playlist
+     * @param playlistID The ID of the playlist
+     * @param tracks A list of tracks to add to the playlist
+     */
+    this.addTracksToPlaylist = async (playlistID, tracks) => {
+        const url = this.url + '/playlists/' + playlistID + '/tracks';
+        const trackURIs = tracks.map(track => track.uri);
+
+        for (let i = 0; i < tracks.length; i += 100) {
+            await fetch(url, {
+                method: 'POST',
+                headers: this.headers,
+                body: JSON.stringify(trackURIs)
+            })
+        }
     }
 }
 

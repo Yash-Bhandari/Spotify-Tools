@@ -11,10 +11,13 @@ const useStyles = makeStyles(theme => ({
 export const Settings = ({ settings, setSettings }) => {
 
     const handleChange = name => val => {
-        setSettings({
-            ...settings,
-            [name]: val
-        })
+        if (name === 'size')
+
+            setSettings(prev => {
+                const next = { ...prev };
+                next[name] = val;
+                return next;
+            })
     }
 
     const classes = useStyles();
@@ -31,9 +34,10 @@ export const Settings = ({ settings, setSettings }) => {
                 <TextField
                     InputLabelProps={{ shrink: true }}
                     type='number'
+                    defaultValue={0}
                     label='Playlist Size'
                     value={settings.size}
-                    onChange={e => handleChange('size')(e.target.val)}
+                    onChange={e => handleChange('size')(e.target.value)}
                 />
             </Grid>
             <Grid item>
@@ -41,7 +45,7 @@ export const Settings = ({ settings, setSettings }) => {
                     InputLabelProps={{ shrink: true }}
                     label={'Playlist Name'}
                     value={settings.playlistName}
-                    onChange={e => handleChange('playlistName')(e.target.val)}
+                    onChange={e => handleChange('playlistName')(e.target.value)}
                 />
             </Grid>
             <Grid item>
