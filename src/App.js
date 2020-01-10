@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Header } from './Components/Layout';
 import { LoginButton } from './Components/LoginButton';
 import { Overview } from './Components/Overview';
-import { DuplicatePruner } from './Components/DuplicatePruner';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { PlaylistGenerator } from './Components/PlaylistGenerator';
 import { ServerLiason, handleRedirect } from './utils';
 import { Container } from '@material-ui/core';
 import { Progress } from './Components/Progress';
+import { DuplicatePruner, DiscoverExtender, PlaylistGenerator } from './Pages';
 
 const App = props => {
   const [accessToken, updateAccessToken] = useState('');
@@ -19,12 +18,13 @@ const App = props => {
     updateAccessToken(newAccessToken);
     const sl = new ServerLiason(newAccessToken);
     setLiason(sl);
-    sl.fetchTracks(setTracks).then(done => {setFinishedFetching(done)}); // fetch tracks is async that returns true on completion
+    sl.fetchTracks(setTracks).then(done => { setFinishedFetching(done) }); // fetch tracks is async that returns true on completion
   }
   let authorized = Boolean(accessToken);
   useEffect(() => handleRedirect(authorized, setAccessToken), []);
 
-  const loginButton = <LoginButton authorized={authorized} />
+  const loginButton = <LoginButton authorized={authorized} forNav={false}/>
+  const navLoginButton = <LoginButton authorized={authorized} forNav={true}/>
   const progress = <Progress numTracks={tracks.length} />
   const subProps = {
     liason,
@@ -37,7 +37,7 @@ const App = props => {
   return (
     <Router>
       <Header >
-        {loginButton}
+        {navLoginButton}
       </Header>
       <Container>
         <Switch>
@@ -46,6 +46,9 @@ const App = props => {
           </Route>
           <Route path='/play-gen' >
             <PlaylistGenerator liason={liason} />
+          </Route>
+          <Route path='/extend'>
+            <DiscoverExtender {...subProps} />
           </Route>
           <Route path='/'>
             <Overview />

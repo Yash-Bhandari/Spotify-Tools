@@ -10,5 +10,9 @@ export const routes = [
     {
         name: 'Playlist Generator',
         path: '/play-gen'
+    },
+    {
+        name: 'Discover Extender',
+        path: '/extend'
     }
 ]

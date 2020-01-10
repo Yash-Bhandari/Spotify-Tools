@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Grid, Stepper, Step, StepLabel, Button, Typography, Radio, RadioGroup, CircularProgress } from '@material-ui/core';
-import { Description } from '../Description';
-import { Progress } from '../Progress';
+import { Description, Progress, Wizard } from '../../Components';
 import { DuplicateDisplay } from './DuplicateDisplay';
-import { ServerLiason } from '../../utils/ServerLiason';
 
 const descriptionText = "If you have a large enough library, you might find that you have quite a few duplicate songs saved. This is because Spotify considers tracks released as singles different from tracks released in an album, even if they are the exact same song. And depending on your listening habits, you also may have accumulated explicit and censored versions of songs. Regardless of why they are there, these duplicates can be pruned out of your Spotify library with this tool.";
 
@@ -114,7 +112,7 @@ const DuplicatePruner = ({ authorized, tracks, liason, loginButton, progress, fi
                                 >
                                     Next
                                 </Button>
-                                : <CircularProgress/>
+                                : <CircularProgress />
                             }
 
                         </Grid>
@@ -141,19 +139,10 @@ const DuplicatePruner = ({ authorized, tracks, liason, loginButton, progress, fi
     }
 
     return (
-        <>
+        <Grid container justify='center' direction='column' spacing={2}>
             <Description text={descriptionText} />
-            <Stepper activeStep={step}>
-                {stepNames.map(stepName =>
-                    <Step key={stepName}>
-                        <StepLabel>{stepName}</StepLabel>
-                    </Step>
-                )}
-            </Stepper>
-            <Grid container justify='center' spacing={2}>
-                {getContent()}
-            </Grid>
-        </>
+            <Wizard step={step} stepNames={stepNames} getContent={getContent} />
+        </Grid>
     )
 }
 
