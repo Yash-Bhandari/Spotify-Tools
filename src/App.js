@@ -44,9 +44,6 @@ const App = props => {
           <Route path='/dup-prune' >
             <DuplicatePruner {...subProps} />
           </Route>
-          <Route path='/play-gen' >
-            <PlaylistGenerator liason={liason} />
-          </Route>
           <Route path='/extend'>
             <DiscoverExtender {...subProps} />
           </Route>

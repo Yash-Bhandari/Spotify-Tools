@@ -7,10 +7,10 @@ export const routes = [
         name: 'Duplicate Pruner',
         path: '/dup-prune'
     },
-    {
+    /*{
         name: 'Playlist Generator',
         path: '/play-gen'
-    },
+    }*/,
     {
         name: 'Discover Extender',
         path: '/extend'
