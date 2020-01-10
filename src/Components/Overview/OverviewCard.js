@@ -2,13 +2,24 @@ import React from 'react';
 import { Button, Typography, Paper, makeStyles } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     root: {
-        'min-width': 500,
-        'padding': 20,
-        'text-align': 'center'
+        'height': '100%',
+        'padding': theme.spacing(2),
+        'text-align': 'center',
+        'display': 'flex',
+        'flex-direction': 'column',
+        'alignItems': 'center',
+        'justify-content': 'space-around',
+        'overflow': 'hidden'
+    },
+    title: {
+        //'margin-bottom': 'auto'
+    },
+    button: {
+        //'margin-top': 'auto'
     }
-})
+}));
 
 const OverviewCard = ({ title, description, path }) => {
     const classes = useStyles();

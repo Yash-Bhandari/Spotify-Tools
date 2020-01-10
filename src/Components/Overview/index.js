@@ -5,14 +5,18 @@ import OverviewCard from './OverviewCard';
 const useStyles = makeStyles(theme => ({
     root: {
         'marginTop': theme.spacing(3)
+    },
+    card: {
+        'min-width': '40%',
+        'max-width': '80%'
     }
 }))
 
 const Overview = () => {
     const classes = useStyles()
     return (
-        <Grid container spacing={2} className={classes.root} justify='center'>
-            <Grid item xs={12} sm={6}>
+        <Grid container spacing={2} className={classes.root} justify='space-around' align='center'>
+            <Grid item sm={12} md={6} className={classes.card}>
                 <OverviewCard
                     title={'Duplicate Pruner'}
                     description={'Removes any songs that have been added multiple times to your library'}
@@ -26,7 +30,7 @@ const Overview = () => {
                     path={'play-gen'}
                 />
     </Grid>*/}
-            <Grid item xs={12} sm={6}>
+            <Grid item sm={12} md={6} className={classes.card}>
                 <OverviewCard
                     title={'Discover Weekly Extender'}
                     description={'Generates a longer version of your Discover Weekly playlist'}
