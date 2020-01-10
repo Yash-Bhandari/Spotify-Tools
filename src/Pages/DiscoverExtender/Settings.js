@@ -24,7 +24,7 @@ export const Settings = ({ settings, setSettings }) => {
             <Grid item lg={12}>
                 <Typography align='center' className={classes.text}>
                     Choose the number and type of songs to include in your playlist.
-                    You can also choose the playlist's name (note that if you already have a playlist with that name, it will be overwritten).
+                    You can also choose the playlist's name (we won't overwrite any existing playlists with the same name).
                 </Typography>
             </Grid>
             <Grid item>
