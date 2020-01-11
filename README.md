@@ -5,3 +5,10 @@ Discover Weekly playlists are nice, but you only get one 30 track playlist a wee
 
 <h3>Duplicate Pruner</h3>
 The duplicate pruner removes duplicate tracks that tend to accumulate in your library over time. Because the exact same song can be released multiple times on different albums (say on a single release, then a full album), your may have saved multiple copies of the same song to your library. 
+
+<h3>Running</h3>
+This app was bootstrapped with create-react-app, so use the following commands to spool up a development build after cloning:
+
+```npm install```
+</br>
+```npm start```
