@@ -6,7 +6,7 @@ import { makePlaylistName } from '../../utils';
 import { PlaylistDisplay } from './PlaylistDisplay';
 import shuffle from 'shuffle-array';
 
-const descriptionText = "Really like your Discover Weekly playlist this week but wish it was a bit longer? Look no further. This tool uses Spotify's API to generate a new playlist based off of your Discover Weekly filled with songs that aren't in your library (yet)."
+const descriptionText = "Really like your Discover Weekly playlist this week but wish it was a bit longer? Look no further. This tool uses Spotify's API to generate a new playlist based off of your Discover Weekly filled with songs that aren't in your library (yet). Make sure that you have saved your Discover Weekly playlist (press the heart icon) before using this tool."
 
 const stepNames = ['Sign Into Spotify', 'Choose Settings', 'Generate Playlist'];
 
