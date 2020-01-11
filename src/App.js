@@ -32,6 +32,7 @@ const App = props => {
     progress,
     authorized,
     tracks,
+    setTracks,
     finishedFetching
   }
   return (

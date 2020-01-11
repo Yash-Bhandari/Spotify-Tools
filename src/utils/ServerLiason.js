@@ -40,7 +40,7 @@ function ServerLiason(authKey) {
         let tracks = [];
 
         let numTracks = 0;
-        while (true && tracks.length < 600) {
+        while (true) {
             const items = await fetch(url + '&offset=' + numTracks, req)
                 .then(resp => resp.json())
                 .then(json => json.items);

@@ -63,7 +63,7 @@ const pruneDuplicates = (liason, duplicates, toKeep) => {
     return toRemove.length;
 }
 
-const DuplicatePruner = ({ authorized, tracks, liason, loginButton, progress, finishedFetching }) => {
+const DuplicatePruner = ({ authorized, tracks, setTracks, liason, loginButton, progress, finishedFetching }) => {
     const [duplicates, setDuplicates] = useState([]);
     const [pruned, setPruned] = useState(false);
     const [step, setStep] = useState(0);
@@ -72,8 +72,11 @@ const DuplicatePruner = ({ authorized, tracks, liason, loginButton, progress, fi
         explicit: explicitPref.IGNORE,
     })
 
-    if (authorized && step === 0)
-        setStep(step + 1);
+    if (authorized && step === 0){
+        setStep(1);
+        liason.fetchTracks(setTracks)
+            .then(_ => setStep(2));
+    }
 
     if (step === 2 && !pruned) {
         const dups = findDuplicates(tracks)
