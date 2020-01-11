@@ -8,7 +8,7 @@ import shuffle from 'shuffle-array';
 
 const descriptionText = "Really like your Discover Weekly playlist this week but wish it was a bit longer? Look no further. This tool uses Spotify's API to generate a new playlist based off of your Discover Weekly filled with songs that aren't in your library (yet)."
 
-const stepNames = ['Sign Into Spotify', 'Choose Settings', 'Generate Playlist'];
+const stepNames = ['Sign Into Spotify', 'Fetch Playlists', 'Choose Settings', 'Generate Playlist'];
 
 const getRecommendedTracks = async (liason, settings) => {
     // gets a list of tracks in the user's discover weekly playlist
@@ -16,7 +16,7 @@ const getRecommendedTracks = async (liason, settings) => {
         .then(playlists => playlists.find(
             playlist => playlist.name === "Discover Weekly")
         )
-        .then(playlist => liason.getPlaylistTracks(playlist.id));
+        .then(playlist => liason.getPlaylistTracks(playlist.id))
 
     const finalPlaylist = new Set([]);
 
@@ -68,25 +68,34 @@ const makePlaylist = async (liason, settings) => {
 
 const DiscoverExtender = ({ liason, loginButton, authorized }) => {
     const [step, setStep] = useState(0);
-    // 0 for not started, 1 for started, 2 for finished
+    /** Progress
+     *  0 for not started
+     *  1 for started making playlist
+     *  2 for finished making playlist
+     *  */
     const [progress, setProgress] = useState(0);
     const [playlist, setPlaylist] = useState(null);
+    const [userPlaylists, setUserPlaylists] = useState([]);
     const [settings, setSettings] = useState({
         playlistName: makePlaylistName(),
         size: 30,
         explicit: true,
-        library: false
+        library: false,
+        seedPlaylist: 0
     });
 
     if (step === 0 && authorized) {
         setStep(1);
+        liason.getPlaylists()
+            .then(playlists => setUserPlaylists(playlists))
+            .then(_ => setStep(2));
     }
 
     if (step == 2 && progress == 0) {
-        setProgress(1);
+        setProgress(3);
         makePlaylist(liason, settings)
             .then(playlist => setPlaylist(playlist))
-            .then(_ => setProgress(2))
+            .then(_ => setProgress(4))
     }
 
     const getContent = () => {
@@ -104,14 +113,14 @@ const DiscoverExtender = ({ liason, loginButton, authorized }) => {
                         </Grid>
                     </>
                 )
-            case 1:
+            case 2:
                 return (
                     <>
                         <Settings settings={settings} setSettings={setSettings} />
                         <Grid item>
                             <Button
                                 variant='contained'
-                                onClick={() => setStep(2)}
+                                onClick={() => setStep(3)}
                                 color='primary'
                             >
                                 Next
@@ -119,10 +128,10 @@ const DiscoverExtender = ({ liason, loginButton, authorized }) => {
                         </Grid>
                     </>
                 )
-            case 2:
+            case 3:
                 return <>
                     {
-                        progress === 1
+                        progress === 31
                             ? <CircularProgress />
                             : <PlaylistDisplay playlist={playlist} />
                     }
