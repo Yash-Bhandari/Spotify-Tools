@@ -14,9 +14,13 @@ const getRecommendedTracks = async (liason, settings) => {
     // gets a list of tracks in the user's discover weekly playlist
     const discoverTracks = await liason.getPlaylists()
         .then(playlists => playlists.find(
-            playlist => playlist.name === "Discover Weekly")
+            playlist => playlist.name === "Discover Weekly"),
         )
-        .then(playlist => liason.getPlaylistTracks(playlist.id));
+        .then(playlist => liason.getPlaylistTracks(playlist.id))
+        .catch(err => {
+            alert('Your Discover Weekly playlist is not saved to your library. Save it and try again.');
+            window.location.href = '/';
+        });
 
     const finalPlaylist = new Set([]);
 
