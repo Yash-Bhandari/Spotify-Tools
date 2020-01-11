@@ -57,7 +57,6 @@ function ServerLiason(authKey) {
             numTracks += items.length;
             setTracks(tracks);
         }
-        console.log(tracks)
         return true;
     }
 
@@ -102,7 +101,7 @@ function ServerLiason(authKey) {
             output.push(...playlists);
             offset += 50;
         }
-
+        console.log(output)
         return output;
     }
 
