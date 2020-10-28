@@ -3,7 +3,7 @@ import { Typography, Paper, RadioGroup, FormControlLabel, Radio, Grid, Button, E
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const Choice = ({ dups, selectedTrack, setSelectedTrack }) =>
-    <ExpansionPanel>
+    <ExpansionPanel TransitionProps={{mountOnEnter: true, unmountOnExit: true}}>
         <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
         >
