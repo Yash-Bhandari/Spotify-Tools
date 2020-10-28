@@ -8,14 +8,16 @@ import {
 } from "@material-ui/core";
 import MenuDrawer from "./MenuDrawer";
 import LoginButton from "../LoginButton";
-import logo from "./spotify_logo.png";
+import logo from "./spotify_logo (Small).png";
 
 const useStyles = makeStyles({
   title: {
     flexGrow: 1,
+    fontFamily: "Montserrat",
+    fontWeight: 600,
   },
   spotifyLogo: {
-    width: "180px",
+    width: "170px",
   },
 });
 
@@ -26,7 +28,7 @@ export default (props) => {
       <Toolbar>
         <MenuDrawer />
         <img className={classes.spotifyLogo} src={logo} alt="Logo" />
-        <Typography className={classes.title} variant="h4">
+        <Typography className={classes.title} variant="h4" color="secondary">
           {" Tools"}
         </Typography>
         {props.children}
