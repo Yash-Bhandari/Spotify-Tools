@@ -126,11 +126,9 @@ export const DuplicateDisplay = ({ duplicates, proceed }) => {
         ) : (
           <>
             <Typography align="center">
-              We found {duplicates.length} duplicate(s).
-            </Typography>
-            <Typography>
-              If there are duplicates that you don't want to remove, just click
-              on them and select 'Keep All'.
+              We found {duplicates.length} duplicate(s). If there are duplicates
+              that you don't want to remove, just click on them and select 'Keep
+              All'.
             </Typography>
           </>
         )}
