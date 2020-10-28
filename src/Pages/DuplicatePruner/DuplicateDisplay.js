@@ -12,6 +12,7 @@ import {
   ExpansionPanelDetails,
   makeStyles,
   Box,
+  Link,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
@@ -61,6 +62,7 @@ const Choice = ({ dups, selectedTrack, setSelectedTrack }) => {
               {dups.map((track, i) => (
                 <FormControlLabel
                   value={i}
+                  key={i}
                   control={<Radio />}
                   label={<AlbumLabel album={track.album} />}
                 />
@@ -77,7 +79,13 @@ const AlbumLabel = ({ album }) => {
   const classes = useStyles();
   return (
     <div className={classes.albumLabel}>
-      <p>{album.name}</p>
+      <Link
+        color="secondary"
+        href={album.external_urls.spotify}
+        target="_blank"
+      >
+        {album.name}
+      </Link>
       {/* we use the last image, as it is the smallest */}
       <img
         src={album.images[album.images.length - 1].url}
@@ -95,7 +103,7 @@ const useStyles = makeStyles({
   albumLabel: {
     display: "flex",
     alignItems: "center",
-    "& p": {
+    "& a": {
       fontWeight: "bold",
       marginRight: "16px",
     },
@@ -116,11 +124,15 @@ export const DuplicateDisplay = ({ duplicates, proceed }) => {
             We didn't find any duplicates. You're all set.
           </Typography>
         ) : (
-          <Typography>
-            We found {duplicates.length} duplicate(s). If there are duplicates
-            that you don't want to remove, just click on them and select 'Keep
-            All'.
-          </Typography>
+          <>
+            <Typography align="center">
+              We found {duplicates.length} duplicate(s).
+            </Typography>
+            <Typography>
+              If there are duplicates that you don't want to remove, just click
+              on them and select 'Keep All'.
+            </Typography>
+          </>
         )}
       </Grid>
       <Paper className={classes.root}>
